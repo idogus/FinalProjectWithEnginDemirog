@@ -3,11 +3,12 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Concrete.InMemory
 {
-    public class InMemoryProductDal : IProductDal
+    public class InMemoryProductDal 
     {
         List<Product> _products;
         public InMemoryProductDal()
@@ -32,14 +33,15 @@ namespace DataAccess.Concrete.InMemory
             _products.Remove(productToDelete);
         }
 
-        public List<Product> GetAll()
+        public Product Get(Func<Product, bool> filter)
         {
-            return _products;
+            if (filter == null) return null;
+            return _products.SingleOrDefault(filter);
         }
 
-        public List<Product> GetByCategory(int categoryId)
+        public List<Product> GetAll(Func<Product, bool> filter = null)
         {
-            return _products.Where(p => p.CategoryId == categoryId).ToList();
+            return filter == null ? _products : _products.Where(filter).ToList();
         }
 
         public void Update(Product product)
