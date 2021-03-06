@@ -16,20 +16,18 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public List<ProductDetailDto> GetProductDetails()
         {
-            using (var context = new NorthwindContext())
-            {
-                var products = from p in context.Products
-                               join c in context.Categories
-                               on p.CategoryId equals c.CategoryId
-                               select new ProductDetailDto
-                               {
-                                   ProductId = p.ProductId,
-                                   ProductName = p.ProductName,
-                                   CategoryName = c.CategoryName,
-                                   UnitsInStock = p.UnitsInStock
-                               };
-                return products.ToList();
-            }
+            using var context = new NorthwindContext();
+            var products = from p in context.Products
+                           join c in context.Categories
+                           on p.CategoryId equals c.CategoryId
+                           select new ProductDetailDto
+                           {
+                               ProductId = p.ProductId,
+                               ProductName = p.ProductName,
+                               CategoryName = c.CategoryName,
+                               UnitsInStock = p.UnitsInStock
+                           };
+            return products.ToList();
         }
     }
 }
